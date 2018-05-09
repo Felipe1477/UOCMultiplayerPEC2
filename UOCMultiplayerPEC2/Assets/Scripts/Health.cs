@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using System;
 
 public class Health : NetworkBehaviour {
 
@@ -12,7 +13,12 @@ public class Health : NetworkBehaviour {
     [SyncVar(hook = "OnChangeHealth")]
     public int currentHealth = maxHealth;
 
+    [SyncVar(hook = "OnChangeNickname")]
+    public String nickname;
+
     public RectTransform healthBar;
+
+    public Text textNickname;
 
     private NetworkStartPosition[] spawnPoints;
 
@@ -22,8 +28,11 @@ public class Health : NetworkBehaviour {
         }
     }
 
+    void Update() {
+    }
+
     public void TakeDamage(int amount) {
-        if (!isServer)  {
+        if (!isServer) {
             return;
         }
 
@@ -31,8 +40,7 @@ public class Health : NetworkBehaviour {
         if (currentHealth <= 0) {
             if (destroyOnDeath) {
                 Destroy(gameObject);
-            }
-            else {
+            } else {
                 currentHealth = maxHealth;
 
                 // called on the Server, but invoked on the Clients
@@ -45,6 +53,12 @@ public class Health : NetworkBehaviour {
         healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
     }
 
+    private void OnChangeNickname(String nickname) {
+        if (textNickname != null) {
+            textNickname.text = nickname;
+        }
+    }
+
     [ClientRpc]
     void RpcRespawn() {
         if (isLocalPlayer) {
@@ -53,7 +67,7 @@ public class Health : NetworkBehaviour {
 
             // If there is a spawn point array and the array is not empty, pick a spawn point at random
             if (spawnPoints != null && spawnPoints.Length > 0) {
-                spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
+                spawnPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)].transform.position;
             }
 
             // Set the player�s position to the chosen spawn point

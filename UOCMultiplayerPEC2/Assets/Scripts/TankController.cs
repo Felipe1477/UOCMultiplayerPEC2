@@ -6,6 +6,9 @@ public class TankController : NetworkBehaviour
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
 
+    [SyncVar(hook = "OnChangeColor")]
+    public Color color;
+
     void Update() {
         if (!isLocalPlayer) {
             return;
@@ -44,10 +47,9 @@ public class TankController : NetworkBehaviour
         Destroy(bullet, 2.0f);
     }
 
-    public override void OnStartLocalPlayer() {
-
-		foreach (MeshRenderer child in GetComponentsInChildren<MeshRenderer>())	{
-			child.material.color = Color.blue;
-		}       
+    private void OnChangeColor(Color c) {
+        foreach (MeshRenderer child in GetComponentsInChildren<MeshRenderer>()) {
+            child.material.color = c;
+        }
     }
 }
