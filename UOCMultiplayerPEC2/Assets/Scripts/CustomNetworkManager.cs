@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 
 public class CustomNetworkManager : NetworkManager {
 
+    private Color[] playerColors = new Color[] { Color.blue, Color.green, Color.magenta, Color.white, Color.cyan, Color.red, Color.yellow, Color.grey, Color.black};
+
     private List<PlayerController> playerPlayerControllerList = new List<PlayerController>();
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {
@@ -14,14 +16,20 @@ public class CustomNetworkManager : NetworkManager {
                 playerPlayerControllerList.Add(p);
             }
         }
-        int numPlayer = 1;
+        int numPlayer = 0;
         foreach (PlayerController p in playerPlayerControllerList) {
             Health health = p.gameObject.GetComponent<Health>();
             health.nickname = ""; // to reset the name and make it update online, same values seem to not update
-            health.nickname = "Player " + numPlayer++;
+            health.nickname = "Player " + ++numPlayer;
+            Color playerColor;
+            if (numPlayer - 1 < playerColors.Length) {
+                playerColor = playerColors[numPlayer - 1];
+            } else {
+                playerColor = playerColors[playerColors.Length-1];
+            }
             TankController tankController = p.gameObject.GetComponent<TankController>();
             tankController.color = new Color(1f, 1f, 1f, 1f);
-            tankController.color = new Color(0.1f + UnityEngine.Random.value * 0.89f, 0.1f + UnityEngine.Random.value * 0.89f, 0.1f + UnityEngine.Random.value * 0.89f, 1f);
+            tankController.color = playerColor;
         }
     }
 
