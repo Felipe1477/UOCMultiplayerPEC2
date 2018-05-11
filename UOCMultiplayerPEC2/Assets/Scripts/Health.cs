@@ -36,6 +36,8 @@ public class Health : NetworkBehaviour {
                 NetGOData.SaveData("client_" + nickname, gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
             } else if (isServer) {
                 NetGOData.SaveData("server_" + nickname, gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
+            } else if (!isLocalPlayer) {
+                NetGOData.SaveData(nickname + "_see_other_client", gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
             }
         }
     }
@@ -46,6 +48,8 @@ public class Health : NetworkBehaviour {
                 NetGOData.SaveData("client_" + nickname, gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
             } else if (isServer) {
                 NetGOData.SaveData("server_" + nickname, gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
+            } else if (!isLocalPlayer) {
+                NetGOData.SaveData(nickname + "_see_other_client", gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
             }
         }
     }
