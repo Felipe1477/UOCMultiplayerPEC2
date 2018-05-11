@@ -18,19 +18,16 @@ public class CustomNetworkManager : NetworkManager {
         }
         int numPlayer = 0;
         foreach (PlayerController p in playerPlayerControllerList) {
-            Health health = p.gameObject.GetComponent<Health>();
             ++numPlayer;
-            health.SetNickname("Player_" + numPlayer);
-            health.RpcSetNickname("Player_" + numPlayer);
-            Color playerColor;
-            if (numPlayer - 1 < playerColors.Length) {
-                playerColor = playerColors[numPlayer - 1];
-            } else {
-                playerColor = playerColors[playerColors.Length-1];
-            }
+            Health health = p.gameObject.GetComponent<Health>();
             TankController tankController = p.gameObject.GetComponent<TankController>();
-            tankController.SetColor(playerColor);
-            tankController.RpcSetColor(playerColor);
+            string nickname = "Player_" + numPlayer;
+            Color playerColor = numPlayer - 1 < playerColors.Length ? playerColors[numPlayer - 1] : playerColors[playerColors.Length - 1];
+
+            health.SetNickname(nickname);               // set the server name
+            health.RpcSetNickname(nickname);            // set the client name
+            tankController.SetColor(playerColor);       // set the server color
+            tankController.RpcSetColor(playerColor);    // set the client color
         }
     }
 
