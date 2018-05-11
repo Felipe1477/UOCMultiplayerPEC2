@@ -10,9 +10,11 @@ using UnityEngine;
  */
 public class NetGOData {
 
+    public const string SEPARATOR_CSV = ";";
+
     public static void SaveData(string name, Vector3 position, float rotation, long time) {
         string pathPos = Application.persistentDataPath + "/csv_" + name + ".csv";
-        string csvAppendContent = name + "|" + position.x + "|" + position.y + "|" + position.z + "|" + rotation + "|" + time;
+        string csvAppendContent = name + SEPARATOR_CSV + position.x + SEPARATOR_CSV + position.y + SEPARATOR_CSV + position.z + SEPARATOR_CSV + rotation + SEPARATOR_CSV + time;
         try {
             if (File.Exists(pathPos)) {
                 csvAppendContent = "\n" + csvAppendContent;
