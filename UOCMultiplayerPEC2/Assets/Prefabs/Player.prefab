@@ -550,6 +550,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1000010938429276, guid: 0664d60d602c92f4db030b2d6a6322c2,
     type: 2}
   bulletSpawn: {fileID: 4000010056926256}
+  color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &114000011844379288
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -578,7 +579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 1
-  m_SendInterval: 0.1
+  m_SendInterval: 0.16666667
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
@@ -678,6 +679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f35591568e621df4a842c9dff1c85a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAI: 0
   destroyOnDeath: 0
   currentHealth: 100
   nickname: 

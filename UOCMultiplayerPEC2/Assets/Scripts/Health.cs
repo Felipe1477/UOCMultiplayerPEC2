@@ -3,8 +3,11 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
+using System.Diagnostics;
 
 public class Health : NetworkBehaviour {
+
+    public bool isAI = true;
 
     public bool destroyOnDeath;
 
@@ -12,9 +15,8 @@ public class Health : NetworkBehaviour {
 
     [SyncVar(hook = "OnChangeHealth")]
     public int currentHealth = maxHealth;
-
-    [SyncVar(hook = "OnChangeNickname")]
-    public String nickname;
+    
+    public String nickname = "";
 
     public RectTransform healthBar;
 
@@ -22,13 +24,30 @@ public class Health : NetworkBehaviour {
 
     private NetworkStartPosition[] spawnPoints;
 
+    private Stopwatch stopwatch;
+
     void Start() {
         if (isLocalPlayer) {
             spawnPoints = FindObjectsOfType<NetworkStartPosition>();
         }
+        if (!isAI) {
+            stopwatch = Stopwatch.StartNew();
+            if (isLocalPlayer) {
+                NetGOData.SaveData("client_" + nickname, gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
+            } else if (isServer) {
+                NetGOData.SaveData("server_" + nickname, gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
+            }
+        }
     }
 
     void Update() {
+        if (!isAI) {
+            if (isLocalPlayer) {
+                NetGOData.SaveData("client_" + nickname, gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
+            } else if (isServer) {
+                NetGOData.SaveData("server_" + nickname, gameObject.transform.position, gameObject.transform.eulerAngles.y, stopwatch.ElapsedMilliseconds);
+            }
+        }
     }
 
     public void TakeDamage(int amount) {
@@ -53,12 +72,6 @@ public class Health : NetworkBehaviour {
         healthBar.sizeDelta = new Vector2(currentHealth, healthBar.sizeDelta.y);
     }
 
-    private void OnChangeNickname(String nickname) {
-        if (textNickname != null) {
-            textNickname.text = nickname;
-        }
-    }
-
     [ClientRpc]
     void RpcRespawn() {
         if (isLocalPlayer) {
@@ -72,6 +85,18 @@ public class Health : NetworkBehaviour {
 
             // Set the player�s position to the chosen spawn point
             transform.position = spawnPoint;
+        }
+    }
+
+    [ClientRpc]
+    public void RpcSetNickname(string name) {
+        SetNickname(name);
+    }
+
+    public void SetNickname(string name) {
+        nickname = name;
+        if (textNickname != null) {
+            textNickname.text = nickname;
         }
     }
 }

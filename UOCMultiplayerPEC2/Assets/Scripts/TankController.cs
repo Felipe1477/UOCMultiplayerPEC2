@@ -5,8 +5,7 @@ public class TankController : NetworkBehaviour
 {
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
-
-    [SyncVar(hook = "OnChangeColor")]
+    
     public Color color;
 
     void Update() {
@@ -47,9 +46,15 @@ public class TankController : NetworkBehaviour
         Destroy(bullet, 2.0f);
     }
 
-    private void OnChangeColor(Color c) {
+    [ClientRpc]
+    public void RpcSetColor(Color c) {
+        SetColor(c);
+    }
+
+    public void SetColor(Color c) {
+        color = c;
         foreach (MeshRenderer child in GetComponentsInChildren<MeshRenderer>()) {
-            child.material.color = c;
+            child.material.color = color;
         }
     }
 }

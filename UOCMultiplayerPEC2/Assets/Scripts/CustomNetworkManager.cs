@@ -19,8 +19,9 @@ public class CustomNetworkManager : NetworkManager {
         int numPlayer = 0;
         foreach (PlayerController p in playerPlayerControllerList) {
             Health health = p.gameObject.GetComponent<Health>();
-            health.nickname = ""; // to reset the name and make it update online, same values seem to not update
-            health.nickname = "Player " + ++numPlayer;
+            ++numPlayer;
+            health.SetNickname("Player_" + numPlayer);
+            health.RpcSetNickname("Player_" + numPlayer);
             Color playerColor;
             if (numPlayer - 1 < playerColors.Length) {
                 playerColor = playerColors[numPlayer - 1];
@@ -28,8 +29,8 @@ public class CustomNetworkManager : NetworkManager {
                 playerColor = playerColors[playerColors.Length-1];
             }
             TankController tankController = p.gameObject.GetComponent<TankController>();
-            tankController.color = new Color(1f, 1f, 1f, 1f);
-            tankController.color = playerColor;
+            tankController.SetColor(playerColor);
+            tankController.RpcSetColor(playerColor);
         }
     }
 

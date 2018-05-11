@@ -20,13 +20,15 @@ public class LobbyMenu : MonoBehaviour {
 		StopDiscovery();
 		discovery.StartAsServer();
 		NetworkManager.singleton.StartServer ();
-	}
+        NetGOData.ClearCSVFiles();
+    }
 
     public void CreateGame() {
 		
         StopDiscovery();
         discovery.StartAsServer();
         NetworkManager.singleton.StartHost();
+        NetGOData.ClearCSVFiles();
     }
 
     public void JoinGame() {
